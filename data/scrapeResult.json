@@ -1,0 +1,11 @@
+{
+    "site": ["gov.id/uu4", "gov.id/uu4", "private.news/fintech-boom"],
+    "content_summary": [
+        "BAB I: Penyelenggara dompet digital wajib verifikasi identitas...",
+        "BAB I: Penyelenggara dompet digital wajib verifikasi identitas...",  # Intentional Duplicate
+        "Startup fintech lokal rilis fitur pembayaran lintas negara hari ini.",
+    ],
+    "source": ["government", "government", "private"],
+    "keywords": ["fintech_payment", "fintech_payment", "fintech_payment"],
+    "date": ["2026-04-10", "2026-04-10", "2026-04-10"],
+}

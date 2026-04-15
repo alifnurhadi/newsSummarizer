@@ -1,0 +1,161 @@
+import os
+from datetime import datetime, timedelta
+from typing import Dict, List, TypedDict
+
+from langchain_community.chat_models import ChatOllama
+
+# LangChain & LangGraph
+from langchain_core.prompts import ChatPromptTemplate
+from langgraph.graph import END, StateGraph
+
+from .init import VECTOR_DB, EMBEDDING_prv
+
+llm = ChatOllama(model="llama3:8b-instruct-q4_K_M", temperature=0.1)
+
+emb = EMBEDDING_prv
+vctrDB = VECTOR_DB
+
+
+class ReportState(TypedDict):
+    target_date: str
+    daily_private_news: str
+    daily_recap: str
+    extracted_topic_keyword: str
+    raw_relevant_laws: List[Dict]
+    legal_essence: str
+    final_advisory: str
+
+class
+
+# News Summarizer Node
+def summarizedTopics(state: ReportState) -> ReportState:
+    # Mock fetched private news
+
+    now = datetime.now()
+
+    mock_news = ""
+
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                """Summarize the business event and output a statement of 1/10 of length of the news,
+                    extract single core keyword tag that best represents the regulatory domain (e.g., 'fintech_payment', 'data_privacy', 'tax').
+                    Format strictly as:
+                    RECAP: [Summary]
+                    KEYWORD: [tag]
+                """,
+            ),
+            ("human", "{news}"),
+        ]
+    )
+
+    response = (prompt | llm).invoke({"news": mock_news}).content
+
+    # Simple parser to split the LLM response
+    recap = response.split("KEYWORD:")[0].replace("RECAP:", "").strip()
+    keyword = (
+        response.split("KEYWORD:")[1].strip() if "KEYWORD:" in response else "general"
+    )
+
+    return {
+        "daily_private_news": mock_news,
+        "daily_recap": recap,
+        "extracted_topic_keyword": keyword,
+    }
+
+
+def hybrid_retrieve_node(state: ReportState) -> ReportState:
+    """Executes the Hybrid Search: Metadata filter first, then vector similarity."""
+    print(
+        f"--- NODE 2: Hybrid Retrieval (Filtering by: {state['extracted_topic_keyword']}) ---"
+    )
+
+    # The WHERE clause: Only search documents tagged with this keyword
+    search_filter = {"keyword": state["extracted_topic_keyword"]}
+
+    # The Vector Search: Find semantically similar chunks within the filtered subset
+    docs = vector_store.similarity_search(
+        query=state["daily_recap"], k=2, filter=search_filter
+    )
+
+    formatted_laws = [
+        {"content": d.page_content, "source": d.metadata.get("source")} for d in docs
+    ]
+    return {"raw_relevant_laws": formatted_laws}
+
+
+def extract_essence_node(state: ReportState) -> ReportState:
+    """Filters out legal boilerplate, keeping only operational constraints."""
+    print("--- NODE 3: Distilling Legal Essence ---")
+
+    if not state["raw_relevant_laws"]:
+        return {
+            "legal_essence": "No highly relevant government watchlists found for this specific event."
+        }
+
+    laws_text = "\n".join(
+        [f"[{l['source']}] {l['content']}" for l in state["raw_relevant_laws"]]
+    )
+
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                "Extract only the specific regulatory constraints from these laws that directly impact the following business recap. Ignore boilerplate.",
+            ),
+            ("human", "Recap: {recap}\n\nLaws:\n{laws}"),
+        ]
+    )
+
+    response = (prompt | llm).invoke({"recap": state["daily_recap"], "laws": laws_text})
+    return {"legal_essence": response.content}
+
+
+def synthesize_report_node(state: ReportState) -> ReportState:
+    """Generates the final actionable business report."""
+    print("--- NODE 4: Synthesizing Final Advisory ---")
+
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                "You are a strategic advisor. Write a concise operational report based on today's events and regulatory constraints. Suggest 2 business scenarios/actions. Cite the provided laws.",
+            ),
+            ("human", "Event: {recap}\n\nRegulatory Constraints:\n{laws}"),
+        ]
+    )
+
+    response = (prompt | llm).invoke(
+        {"recap": state["daily_recap"], "laws": state["legal_essence"]}
+    )
+    return {"final_advisory": response.content}
+
+
+# ==========================================
+# 4. COMPILE AND EXECUTE
+# ==========================================
+
+workflow = StateGraph(ReportState)
+
+workflow.add_node("recap_and_tag", summarizedTopics)
+workflow.add_node("hybrid_retrieve", hybrid_retrieve_node)
+workflow.add_node("extract_essence", extract_essence_node)
+workflow.add_node("synthesize", synthesize_report_node)
+
+workflow.set_entry_point("recap_and_tag")
+workflow.add_edge("recap_and_tag", "hybrid_retrieve")
+workflow.add_edge("hybrid_retrieve", "extract_essence")
+workflow.add_edge("extract_essence", "synthesize")
+workflow.add_edge("synthesize", END)
+
+app = workflow.compile()
+
+if __name__ == "__main__":
+    yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+
+    print(f"\n[ RUNNING D+1 AGENTIC PIPELINE FOR: {yesterday} ]\n")
+    final_state = app.invoke({"target_date": yesterday})
+
+    print("\n================ FINAL BUSINESS REPORT ================\n")
+    print(final_state["final_advisory"])

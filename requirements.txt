@@ -3,16 +3,15 @@ apache-airflow==2.8.3
 
 # Data Processing
 polars==0.20.18
-pandas==2.2.1
+pandas==2.2.3
 
 # Web Scraping
-requests==2.31.0
+requests==2.32.5
 beautifulsoup4==4.12.3
 
 # Data Validation
-pydantic==2.6.4
-
+pydantic==2.7.4
 
 # Database
 psycopg2-binary==2.9.9
-SQLAlchemy==2.0.29
+SQLAlchemy==1.4.52
