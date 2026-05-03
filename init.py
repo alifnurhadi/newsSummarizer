@@ -10,8 +10,8 @@ EMBEDDING_prv = HuggingFaceEmbeddings(
 
 VECTOR_DB = Chroma(
     collection_name="Global_Gov_Data",
-    embedding_function= EMBEDDING_prv,
-    persist_directory="./local_vectordb",
+    embedding_function=EMBEDDING_prv,
+    persist_directory="./vectordb",
 )
 
 

@@ -16,7 +16,7 @@ def CleanFilterData(newData):
     df = pl.DataFrame(newData).drop_nulls(subset="dates")
     initial_count = df.height
 
-    df = df.filter(~pl.col("titles").is_in(topics) or pl.col("sites").is_in(sites))
+    df = df.filter(~pl.col("titles").is_in(topics) | pl.col("sites").is_in(sites))
 
     df = df.unique(subset=["titles", "sites"])
     print(

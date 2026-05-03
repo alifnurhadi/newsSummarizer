@@ -1,4 +1,4 @@
-import os
+import json
 from datetime import datetime, timedelta
 from typing import Dict, List, TypedDict
 
@@ -10,7 +10,7 @@ from langgraph.graph import END, StateGraph
 
 from .init import VECTOR_DB, EMBEDDING_prv
 
-llm = ChatOllama(model="llama3:8b-instruct-q4_K_M", temperature=0.1)
+llm = ChatOllama(model="llama3:8b-instruct-q4_K_M", temperature=0.1, format="json")
 
 emb = EMBEDDING_prv
 vctrDB = VECTOR_DB
@@ -25,25 +25,26 @@ class ReportState(TypedDict):
     legal_essence: str
     final_advisory: str
 
-class
 
-# News Summarizer Node
+latest_news = json.load("/Users/alif/Documents/newsSummarizer/data/scrapeResult.json")
+
+
 def summarizedTopics(state: ReportState) -> ReportState:
+
     # Mock fetched private news
-
-    now = datetime.now()
-
     mock_news = ""
 
     prompt = ChatPromptTemplate.from_messages(
         [
             (
                 "system",
-                """Summarize the business event and output a statement of 1/10 of length of the news,
-                    extract single core keyword tag that best represents the regulatory domain (e.g., 'fintech_payment', 'data_privacy', 'tax').
-                    Format strictly as:
-                    RECAP: [Summary]
-                    KEYWORD: [tag]
+                """Summarize the business event and output a statement into ( 1/10 from length of the news),
+                    extract single core keyword tag
+                    Format strictly as json below:
+                    {{
+                    "RECAP": 'your Summary'
+                    "KEYWORD": 'your tag or default to "general"'
+                    }}
                 """,
             ),
             ("human", "{news}"),
@@ -53,10 +54,7 @@ def summarizedTopics(state: ReportState) -> ReportState:
     response = (prompt | llm).invoke({"news": mock_news}).content
 
     # Simple parser to split the LLM response
-    recap = response.split("KEYWORD:")[0].replace("RECAP:", "").strip()
-    keyword = (
-        response.split("KEYWORD:")[1].strip() if "KEYWORD:" in response else "general"
-    )
+    json.load(response)
 
     return {
         "daily_private_news": mock_news,
@@ -66,10 +64,6 @@ def summarizedTopics(state: ReportState) -> ReportState:
 
 
 def hybrid_retrieve_node(state: ReportState) -> ReportState:
-    """Executes the Hybrid Search: Metadata filter first, then vector similarity."""
-    print(
-        f"--- NODE 2: Hybrid Retrieval (Filtering by: {state['extracted_topic_keyword']}) ---"
-    )
 
     # The WHERE clause: Only search documents tagged with this keyword
     search_filter = {"keyword": state["extracted_topic_keyword"]}
@@ -86,8 +80,6 @@ def hybrid_retrieve_node(state: ReportState) -> ReportState:
 
 
 def extract_essence_node(state: ReportState) -> ReportState:
-    """Filters out legal boilerplate, keeping only operational constraints."""
-    print("--- NODE 3: Distilling Legal Essence ---")
 
     if not state["raw_relevant_laws"]:
         return {
@@ -113,8 +105,6 @@ def extract_essence_node(state: ReportState) -> ReportState:
 
 
 def synthesize_report_node(state: ReportState) -> ReportState:
-    """Generates the final actionable business report."""
-    print("--- NODE 4: Synthesizing Final Advisory ---")
 
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -122,7 +112,19 @@ def synthesize_report_node(state: ReportState) -> ReportState:
                 "system",
                 "You are a strategic advisor. Write a concise operational report based on today's events and regulatory constraints. Suggest 2 business scenarios/actions. Cite the provided laws.",
             ),
-            ("human", "Event: {recap}\n\nRegulatory Constraints:\n{laws}"),
+            (
+                "human",
+                """
+                Stories :
+
+            [ syntesise of news {recap} and laws {laws} that are match and contradict that impact the stakeholder in news result ] +
+            make it as short as 500 character and maximum of 1000 character.
+
+            What could we do :
+
+            [ based on synthesise result, gave number of suggestion for stakeholder in the news affected and for the general business owner ] +
+            Make it in bullet points.""",
+            ),
         ]
     )
 
@@ -131,10 +133,6 @@ def synthesize_report_node(state: ReportState) -> ReportState:
     )
     return {"final_advisory": response.content}
 
-
-# ==========================================
-# 4. COMPILE AND EXECUTE
-# ==========================================
 
 workflow = StateGraph(ReportState)
 
@@ -154,8 +152,4 @@ app = workflow.compile()
 if __name__ == "__main__":
     yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
 
-    print(f"\n[ RUNNING D+1 AGENTIC PIPELINE FOR: {yesterday} ]\n")
     final_state = app.invoke({"target_date": yesterday})
-
-    print("\n================ FINAL BUSINESS REPORT ================\n")
-    print(final_state["final_advisory"])
