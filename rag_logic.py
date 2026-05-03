@@ -16,23 +16,15 @@ emb = EMBEDDING_prv
 vctrDB = VECTOR_DB
 
 
-class ReportState(TypedDict):
-    target_date: str
-    daily_private_news: str
-    daily_recap: str
-    extracted_topic_keyword: str
-    raw_relevant_laws: List[Dict]
-    legal_essence: str
-    final_advisory: str
+with open("/Users/alif/Documents/newsSummarizer/data/ScrapeResult.json", "r") as read:
+    latest_news = json.load(read)
 
 
-latest_news = json.load("/Users/alif/Documents/newsSummarizer/data/scrapeResult.json")
+class stateManagement(TypedDict):
+    summary: List[str]
 
 
-def summarizedTopics(state: ReportState) -> ReportState:
-
-    # Mock fetched private news
-    mock_news = ""
+def summarizedTopics(state: stateManagement) -> stateManagement:
 
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -63,7 +55,7 @@ def summarizedTopics(state: ReportState) -> ReportState:
     }
 
 
-def hybrid_retrieve_node(state: ReportState) -> ReportState:
+def hybrid_retrieve_node(state: stateManagement) -> stateManagement:
 
     # The WHERE clause: Only search documents tagged with this keyword
     search_filter = {"keyword": state["extracted_topic_keyword"]}
@@ -79,7 +71,7 @@ def hybrid_retrieve_node(state: ReportState) -> ReportState:
     return {"raw_relevant_laws": formatted_laws}
 
 
-def extract_essence_node(state: ReportState) -> ReportState:
+def extract_essence_node(state: stateManagement) -> stateManagement:
 
     if not state["raw_relevant_laws"]:
         return {
@@ -104,7 +96,7 @@ def extract_essence_node(state: ReportState) -> ReportState:
     return {"legal_essence": response.content}
 
 
-def synthesize_report_node(state: ReportState) -> ReportState:
+def synthesize_report_node(state: stateManagement) -> stateManagement:
 
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -134,7 +126,7 @@ def synthesize_report_node(state: ReportState) -> ReportState:
     return {"final_advisory": response.content}
 
 
-workflow = StateGraph(ReportState)
+workflow = StateGraph(stateManagement)
 
 workflow.add_node("recap_and_tag", summarizedTopics)
 workflow.add_node("hybrid_retrieve", hybrid_retrieve_node)
