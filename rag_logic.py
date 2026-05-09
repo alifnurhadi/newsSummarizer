@@ -22,9 +22,10 @@ with open("/Users/alif/Documents/newsSummarizer/data/ScrapeResult.json", "r") as
 
 class stateManagement(TypedDict):
     summary: List[str]
+    keyTopic: List[str]
 
 
-def summarizedTopics(state: stateManagement) -> stateManagement:
+def summarizedTopics(state: stateManagement, news: str, model=llm) -> stateManagement:
 
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -34,8 +35,8 @@ def summarizedTopics(state: stateManagement) -> stateManagement:
                     extract single core keyword tag
                     Format strictly as json below:
                     {{
-                    "RECAP": 'your Summary'
-                    "KEYWORD": 'your tag or default to "general"'
+                    "summary": 'your Summary'
+                    "topic": 'your tag or default to "general"'
                     }}
                 """,
             ),
@@ -43,16 +44,9 @@ def summarizedTopics(state: stateManagement) -> stateManagement:
         ]
     )
 
-    response = (prompt | llm).invoke({"news": mock_news}).content
+    response = (prompt | model).invoke({"news": news}).content
 
-    # Simple parser to split the LLM response
-    json.load(response)
-
-    return {
-        "daily_private_news": mock_news,
-        "daily_recap": recap,
-        "extracted_topic_keyword": keyword,
-    }
+    return state(response["summary"], response["topic"])
 
 
 def hybrid_retrieve_node(state: stateManagement) -> stateManagement:
