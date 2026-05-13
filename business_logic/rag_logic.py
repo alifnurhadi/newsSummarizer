@@ -51,7 +51,8 @@ def summarizedTopics(state: ReportState) -> ReportState:
     )
 
     response = (prompt | llm_json).invoke({"news": news_corpus}).content
-    data = json.loads(response)  #
+    clean_response = response.strip().strip("```json").strip("```")
+    data = json.loads(clean_response)
 
     return {
         "daily_recap": data.get("recap", "No summary generated"),
@@ -59,22 +60,75 @@ def summarizedTopics(state: ReportState) -> ReportState:
     }
 
 
-def hybrid_retrieve_node(state: ReportState) -> ReportState:
-    """Node 2: Fixed variable naming error (vctrDB)."""
-    print(
-        f"--- NODE 2: Hybrid Retrieval (Filter: {state['extracted_topic_keyword']}) ---"
+def agentic_retrieve_node(state: ReportState) -> ReportState:
+    """Node 2: Autonomous query generation and self-correcting retrieval."""
+    print("--- NODE 2: Agentic Retrieval ---")
+    recap = state["daily_recap"]
+
+    # Agent formulates the initial semantic query
+    query_prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                "You are a legal research agent. Read the news recap and formulate ONE precise semantic search query to find relevant Indonesian regulations or laws. Output ONLY the query string. No preamble or quotes.",
+            ),
+            ("human", "{recap}"),
+        ]
     )
 
-    search_filter = {"keyword": state["extracted_topic_keyword"]}  #
-
-    # Fixed: Changed vector_store to VECTOR_DB from init.py
-    docs = VECTOR_DB.similarity_search(
-        query=state["daily_recap"], k=2, filter=search_filter
+    initial_query = (
+        (query_prompt | llm_text).invoke({"recap": recap}).content.strip(" \"'")
     )
+    print(f"  [Agent] Initial Query: '{initial_query}'")
 
+    # Execute first search (pure semantic, no metadata filters)
+    docs = VECTOR_DB.similarity_search(query=initial_query, k=3)
     formatted_laws = [
-        {"content": d.page_content, "source": d.metadata.get("source")} for d in docs
+        {"content": d.page_content, "source": d.metadata.get("source", "Unknown")}
+        for d in docs
     ]
+
+    # Agent evaluates the retrieval quality
+    eval_prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                """Evaluate if these retrieved laws directly govern the events in the news recap.
+        Respond strictly in JSON format:
+        {{
+            "is_relevant": true or false,
+            "better_query": "A new, highly specific search query string if false, or null if true"
+        }}""",
+            ),
+            ("human", "News: {recap}\n\nRetrieved Laws: {laws}"),
+        ]
+    )
+
+    eval_response = (
+        (eval_prompt | llm_json)
+        .invoke({"recap": recap, "laws": json.dumps(formatted_laws)})
+        .content
+    )
+
+    # Parse evaluation and optionally retry (Self-Correction Loop)
+    try:
+        clean_eval = eval_response.strip().strip("```json").strip("```")
+        evaluation = json.loads(clean_eval)
+    except json.JSONDecodeError:
+        print("  [Agent] Evaluation parsing failed, proceeding with initial results.")
+        evaluation = {"is_relevant": True}
+
+    if not evaluation.get("is_relevant") and evaluation.get("better_query"):
+        new_query = evaluation["better_query"]
+        print(f"  [Agent] Self-Correction Triggered. Retrying with: '{new_query}'")
+
+        # Execute secondary search
+        retry_docs = VECTOR_DB.similarity_search(query=new_query, k=3)
+        formatted_laws = [
+            {"content": d.page_content, "source": d.metadata.get("source", "Unknown")}
+            for d in retry_docs
+        ]
+
     return {"raw_relevant_laws": formatted_laws}
 
 
@@ -141,7 +195,7 @@ def review_refine_node(state: ReportState) -> ReportState:
 
 workflow = StateGraph(ReportState)
 workflow.add_node("recap", summarizedTopics)
-workflow.add_node("retrieve", hybrid_retrieve_node)
+workflow.add_node("retrieve", agentic_retrieve_node)
 workflow.add_node("essence", extract_essence_node)
 workflow.add_node("synthesize", synthesize_report_node)
 workflow.add_node("review", review_refine_node)
