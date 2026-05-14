@@ -1,0 +1,103 @@
+UNDANG-UNDANG REPUBLIK INDONESIA NOMOR 15 TAHUN 2026
+TENTANG
+TATA KELOLA KORPORASI TRANSNASIONAL, LEMBAGA PENGELOLA INVESTASI, DAN PEMBIAYAAN INFRASTRUKTUR HIJAU
+(DRAFT SIMULASI STRESS-TEST RAG - DANANTARA & TELKOM)
+
+DENGAN RAHMAT TUHAN YANG MAHA ESA
+PRESIDEN REPUBLIK INDONESIA,
+
+Menimbang:
+a. bahwa dalam rangka mempercepat transisi energi nasional dan menyelesaikan permasalahan tata kelola perkotaan, diperlukan payung hukum yang kuat bagi pembiayaan infrastruktur hijau, khususnya teknologi pengolahan sampah menjadi energi (Waste-to-Energy);
+b. bahwa Lembaga Pengelola Investasi (Sovereign Wealth Fund) memiliki peran krusial dalam mengonsolidasikan aset negara dan menarik investasi asing langsung (Foreign Direct Investment) melalui pembentukan perusahaan sub-holding;
+c. bahwa perusahaan negara dan emiten yang melakukan pencatatan saham ganda (Dual Listing) di bursa efek internasional semakin terpapar pada yurisdiksi hukum ekstrateritorial dan pengawasan ketat dari otoritas bursa asing;
+d. bahwa untuk melindungi stabilitas pasar modal Indonesia (Bursa Efek Indonesia) dari dampak investigasi hukum lintas negara terkait praktik korupsi asing dan manipulasi akuntansi, diperlukan penyesuaian tata kelola perusahaan;
+e. bahwa berdasarkan pertimbangan sebagaimana dimaksud dalam huruf a, b, c, dan d, perlu membentuk Undang-Undang tentang Tata Kelola Korporasi Transnasional, Lembaga Pengelola Investasi, dan Pembiayaan Infrastruktur Hijau.
+
+Mengingat:
+1. Pasal 5 ayat (1), Pasal 20, dan Pasal 33 Undang-Undang Dasar Negara Republik Indonesia Tahun 1945;
+2. Undang-Undang Nomor 19 Tahun 2003 tentang Badan Usaha Milik Negara;
+3. Undang-Undang Nomor 8 Tahun 1995 tentang Pasar Modal;
+4. Undang-Undang Nomor 11 Tahun 2020 tentang Cipta Kerja (Bagian Lembaga Pengelola Investasi).
+
+Dengan Persetujuan Bersama
+DEWAN PERWAKILAN RAKYAT REPUBLIK INDONESIA
+dan
+PRESIDEN REPUBLIK INDONESIA
+
+MEMUTUSKAN:
+Menetapkan: UNDANG-UNDANG TENTANG TATA KELOLA KORPORASI TRANSNASIONAL, LEMBAGA PENGELOLA INVESTASI, DAN PEMBIAYAAN INFRASTRUKTUR HIJAU.
+
+BAB I
+KETENTUAN UMUM
+Pasal 1
+Dalam Undang-Undang ini yang dimaksud dengan:
+1. Lembaga Pengelola Investasi (LPI) atau Sovereign Wealth Fund (SWF) adalah lembaga yang diberi kewenangan khusus (sui generis) dalam rangka pengelolaan dana investasi sentral yang bertujuan untuk meningkatkan dan mengoptimalkan nilai investasi yang dikelola secara jangka panjang.
+2. Perusahaan Induk Super (Superholding Company) adalah entitas pemerintah yang membawahi berbagai klaster Badan Usaha Milik Negara (BUMN) dan LPI.
+3. Infrastruktur Hijau adalah fasilitas fisik dan sistem yang dirancang untuk melestarikan lingkungan, termasuk namun tidak terbatas pada Pembangkit Listrik Tenaga Sampah (Waste-to-Energy/WtE), energi surya, dan manajemen limbah perkotaan.
+4. Perjanjian Jual Beli Listrik (Power Purchase Agreement/PPA) adalah kontrak jangka panjang antara pengembang pembangkit listrik swasta atau konsorsium dengan perusahaan utilitas negara untuk menjamin kepastian arus kas.
+5. Bursa Efek Indonesia (BEI) adalah pihak yang menyelenggarakan dan menyediakan sistem dan/atau sarana untuk mempertemukan penawaran jual dan beli Efek pihak-pihak lain dengan tujuan memperdagangkan Efek di antara mereka.
+6. Pencatatan Ganda (Dual Listing) adalah pencatatan saham suatu emiten pada dua atau lebih bursa efek yang berbeda yurisdiksi, seperti di BEI dan New York Stock Exchange (NYSE).
+7. Tindak Pidana Korupsi Asing (Foreign Corrupt Practices) adalah tindakan penyuapan, gratifikasi, atau manipulasi buku akuntansi yang dilakukan oleh emiten untuk mempengaruhi pejabat publik asing dalam rangka memenangkan kontrak proyek infrastruktur (seperti proyek telekomunikasi atau infrastruktur dasar).
+
+BAB II
+LEMBAGA PENGELOLA INVESTASI DAN INFRASTRUKTUR HIJAU
+Pasal 2
+(1) LPI berwenang untuk membentuk entitas anak usaha atau perusahaan induk (Holding Company) yang secara khusus berfokus pada pengembangan proyek Infrastruktur Hijau.
+(2) Entitas anak usaha yang bergerak di bidang pengolahan sampah menjadi energi (Waste-to-Energy) berhak mengelola kemitraan strategis dengan investor asing dan domestik.
+(3) Dalam pembentukan konsorsium untuk proyek Waste-to-Energy fase lanjutan, LPI atau anak usahanya diwajibkan untuk mempertahankan porsi kepemilikan saham minimum sebesar 51% (lima puluh satu persen) demi menjaga kendali aset strategis nasional.
+
+Pasal 3
+(1) Entitas anak usaha LPI sebagaimana dimaksud dalam Pasal 2 ayat (2) dapat mencatatkan sahamnya (Penawaran Umum Perdana/IPO) di Bursa Efek Indonesia.
+(2) Rencana pencatatan saham (IPO) hanya dapat dieksekusi setelah entitas anak tersebut memiliki arus kas (cash flow) positif dari operasional proyek.
+(3) Arus kas positif sebagaimana dimaksud pada ayat (2) dibuktikan dengan telah ditandatanganinya dan berlakunya Perjanjian Jual Beli Listrik (PPA) secara final dengan pihak pembeli daya.
+(4) Penargetan IPO diwajibkan selambat-lambatnya 2 (dua) tahun setelah dimulainya konstruksi fasilitas infrastruktur hijau secara masif.
+
+BAB III
+TATA KELOLA KORPORASI DAN PENCATATAN GANDA (DUAL LISTING)
+Pasal 4
+(1) Emiten Indonesia yang melakukan Pencatatan Ganda di bursa efek yurisdiksi asing (seperti Amerika Serikat) secara otomatis tunduk pada regulasi sekuritas negara tersebut, termasuk aturan mengenai pencegahan korupsi lintas batas (Foreign Corrupt Practices Act/FCPA).
+(2) Emiten sebagaimana dimaksud pada ayat (1) wajib membentuk Direktorat Hukum dan Kepatuhan yang independen.
+(3) Emiten diwajibkan mengangkat seorang Pejabat Integritas Utama (Chief Integrity Officer/CIO) yang bertanggung jawab langsung kepada Dewan Komisaris untuk mengawasi tata kelola, integritas bisnis, dan audit kepatuhan.
+
+Pasal 5
+(1) Dalam hal terdapat indikasi awal atau pemberitahuan resmi mengenai investigasi oleh otoritas regulasi asing, seperti Securities and Exchange Commission (SEC) atau Department of Justice (DOJ), Emiten wajib melakukan keterbukaan informasi kepada publik dan BEI paling lambat 2x24 jam sejak pemberitahuan diterima.
+(2) BEI berwenang untuk memanggil Direksi Emiten, melakukan dengar pendapat (Hearing), dan meminta klarifikasi tertulis secara berkala mengenai perkembangan investigasi hukum tersebut.
+(3) Emiten wajib berkoordinasi secara aktif dengan Otoritas Jasa Keuangan (OJK) terkait potensi risiko sistemik yang dapat mempengaruhi stabilitas harga saham di bursa domestik.
+
+BAB IV
+STANDAR AKUNTANSI DAN KEBIJAKAN CLAWBACK
+Pasal 6
+(1) Apabila investigasi otoritas asing berujung pada temuan manipulasi pelaporan aset dasar, seperti proyek infrastruktur telekomunikasi (misalnya kabel fiber optik atau aset last-mile), Emiten wajib melakukan evaluasi dan restatement (penyajian kembali) atas laporan keuangan tahun-tahun sebelumnya.
+(2) Emiten wajib mengimplementasikan Kebijakan Penarikan Kembali (Clawback Policy) yang memungkinkan perusahaan untuk menarik kembali bonus, insentif, dan kompensasi berbasis saham yang telah dibayarkan kepada Direksi atau eksekutif senior, apabila terbukti bahwa laporan keuangan yang mendasari pemberian bonus tersebut mengandung kesalahan material atau fraud.
+
+Pasal 7
+(1) Keterlambatan penyerahan laporan keuangan tahunan ke otoritas bursa asing (seperti Form 20-F) akibat investigasi hukum yang sedang berlangsung harus segera dilaporkan kepada BEI dan OJK dengan melampirkan Surat Pemberitahuan Keterlambatan (Notification of Late Filing).
+(2) BEI dapat mengenakan status pemantauan khusus atau menghentikan sementara perdagangan efek (Suspension) Emiten yang gagal memenuhi tenggat waktu pelaporan akuntansi akibat investigasi internasional.
+
+BAB V
+PERLINDUNGAN INVESTOR DAN KELAS TINDAKAN (CLASS ACTION)
+Pasal 8
+(1) Pemegang saham minoritas berhak mengajukan gugatan perwakilan kelompok (Class Action) di pengadilan negeri apabila terjadi penurunan nilai saham yang signifikan dan terbukti secara sah diakibatkan oleh kelalaian Direksi dalam mematuhi hukum anti-korupsi asing.
+(2) Emiten wajib menyediakan cadangan dana darurat (provision) dalam laporan keuangannya apabila pemberitahuan formal mengenai gugatan Class Action telah diregistrasi oleh pengadilan di yurisdiksi mana pun.
+
+BAB VI
+SANKSI ADMINISTRATIF
+Pasal 9
+(1) Pelanggaran terhadap ketentuan IPO LPI dalam Pasal 3, kewajiban pelaporan investigasi asing dalam Pasal 5, dan implementasi kebijakan Clawback dalam Pasal 6 dikenakan sanksi administratif secara bertingkat.
+(2) Sanksi administratif sebagaimana dimaksud pada ayat (1) dapat berupa:
+a. Peringatan tertulis pertama, kedua, dan ketiga;
+b. Denda administratif paling sedikit Rp50.000.000.000,00 (lima puluh miliar rupiah) bagi Emiten yang menyembunyikan status investigasi otoritas asing;
+c. Pembatalan persetujuan pencatatan saham (Delisting) secara paksa oleh BEI.
+
+BAB VII
+KETENTUAN PENUTUP
+Pasal 10
+Pada saat Undang-Undang ini mulai berlaku, seluruh regulasi pasar modal dan perundang-undangan BUMN yang bertentangan dengan ketentuan transparansi yurisdiksi ganda dinyatakan tidak berlaku.
+
+Pasal 11
+Undang-Undang ini mulai berlaku pada tanggal diundangkan.
+Agar setiap orang mengetahuinya, memerintahkan pengundangan Undang-Undang ini dengan penempatannya dalam Lembaran Negara Republik Indonesia.
+
+Disahkan di Jakarta
+pada tanggal 1 Mei 2026
+PRESIDEN REPUBLIK INDONESIA
