@@ -29,9 +29,26 @@ def summarizedTopics(state: ReportState) -> ReportState:
     print(f"--- NODE 1: Recapping {len(state['daily_private_news'])} News Items ---")
 
     # Batch news items into a single string for analysis
-    news_corpus = "\n\n".join(
-        [f"URL: {n['link']}\nNews: {n['content']}" for n in state["daily_private_news"]]
-    )
+    MAX_CHARS = 24000
+    news_corpus = ""
+    articles_processed = 0
+
+    for n in state["daily_private_news"]:
+        link = n.get("link", "Unknown URL")
+        content = n.get("content", "")
+
+        # Format the individual article
+        article_text = f"URL: {link}\nNews: {content}\n\n"
+
+        # Check if adding this article exceeds our safe token/character limit
+        if len(news_corpus) + len(article_text) > MAX_CHARS:
+            print(
+                f"  ⚠️ [Agent Warning] Context limit reached! Truncated processing to {articles_processed} articles to prevent OOM crash."
+            )
+            break
+
+        news_corpus += article_text
+        articles_processed += 1
 
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -81,6 +98,11 @@ def agentic_retrieve_node(state: ReportState) -> ReportState:
     )
     print(f"  [Agent] Initial Query: '{initial_query}'")
 
+    search_filter = {"keyword": state["extracted_topic_keyword"]}
+
+    # First search
+    docs = VECTOR_DB.similarity_search(query=initial_query, k=3, filter=search_filter)
+
     # Execute first search (pure semantic, no metadata filters)
     docs = VECTOR_DB.similarity_search(query=initial_query, k=3)
     formatted_laws = [
@@ -118,12 +140,22 @@ def agentic_retrieve_node(state: ReportState) -> ReportState:
         print("  [Agent] Evaluation parsing failed, proceeding with initial results.")
         evaluation = {"is_relevant": True}
 
-    if not evaluation.get("is_relevant") and evaluation.get("better_query"):
+    better_query = evaluation.get("better_query")
+
+    if (
+        not evaluation.get("is_relevant")
+        and better_query
+        and better_query.lower() != "null"
+    ):
+        print(f"  [Agent] Self-Correction Triggered. Retrying with: '{better_query}'")
+
         new_query = evaluation["better_query"]
-        print(f"  [Agent] Self-Correction Triggered. Retrying with: '{new_query}'")
 
         # Execute secondary search
-        retry_docs = VECTOR_DB.similarity_search(query=new_query, k=3)
+        retry_docs = VECTOR_DB.similarity_search(
+            query=new_query, k=3, filter=search_filter
+        )
+
         formatted_laws = [
             {"content": d.page_content, "source": d.metadata.get("source", "Unknown")}
             for d in retry_docs
@@ -208,3 +240,21 @@ workflow.add_edge("synthesize", "review")
 workflow.add_edge("review", END)
 
 app = workflow.compile()
+
+if __name__ == "__main__":
+    import sys
+
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from init import loadNews
+
+    all_news = loadNews()
+    # (Add your date filtering logic here)
+
+    if all_news:
+        final_state = app.invoke(
+            {
+                "target_date": "2026-05-12",  # or dynamic date
+                "daily_private_news": all_news,
+            }
+        )
+        print(final_state["final_advisory"])
