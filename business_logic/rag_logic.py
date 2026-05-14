@@ -10,8 +10,8 @@ from langgraph.graph import END, StateGraph
 from ..init import VECTOR_DB
 
 # Config: JSON-mode for extraction, Text-mode for advisory
-llm_json = ChatOllama(model="llama3:8b-instruct-q4_K_M", temperature=0.1, format="json")
-llm_text = ChatOllama(model="llama3:8b-instruct-q4_K_M", temperature=0.2)
+llm_json = ChatOllama(model="llama3:latest", temperature=0.1, format="json")
+llm_text = ChatOllama(model="llama3:latest", temperature=0.2)
 
 
 class ReportState(TypedDict):

@@ -2,10 +2,10 @@ import argparse
 import os
 import sys
 
+import pdfplumber
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-# Import the existing database setup from your init.py
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from init import VECTOR_DB
 
 
@@ -19,6 +19,20 @@ def extract_text_from_txt(txt_path: str) -> str:
         return ""
 
 
+def extract_text_from_pdf(pdf_path: str) -> str:
+    """Reads text from a .pdf file using pdfplumber."""
+    text_content = ""
+    try:
+        with pdfplumber.open(pdf_path) as pdf:
+            for page in pdf.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    text_content += page_text + "\n\n"
+    except Exception as e:
+        print(f"Error reading PDF {pdf_path}: {e}")
+    return text_content
+
+
 def ingest_law_to_db(file_path: str, source_name: str, keyword: str):
     """
     Reads a law (TXT), chunks it, and stores it in the Vector DB.
@@ -26,6 +40,22 @@ def ingest_law_to_db(file_path: str, source_name: str, keyword: str):
     # Read the text
     print(f"Detected TXT. Reading raw text from '{file_path}'...")
     raw_text = extract_text_from_txt(file_path)
+
+    if not raw_text.strip():
+        print("❌ No text could be extracted. Skipping.")
+        return
+
+    ext = os.path.splitext(file_path)[1].lower()
+
+    if ext == ".txt":
+        print(f"Detected TXT. Reading raw text from '{file_path}'...")
+        raw_text = extract_text_from_txt(file_path)
+    elif ext == ".pdf":
+        print(f"Detected PDF. Reading text from '{file_path}' using pdfplumber...")
+        raw_text = extract_text_from_pdf(file_path)
+    else:
+        print(f"❌ Unsupported file format: {ext}. Please provide a .txt or .pdf file.")
+        return
 
     if not raw_text.strip():
         print("❌ No text could be extracted. Skipping.")
@@ -41,6 +71,14 @@ def ingest_law_to_db(file_path: str, source_name: str, keyword: str):
     chunks = splitter.create_documents([raw_text], metadatas=[metadata])
     print(f"Created {len(chunks)} semantic chunks.")
 
+    try:
+        # Find existing documents with this source name to handle same law
+        existing_docs = VECTOR_DB.get(where={"source": source_name})
+        if existing_docs["ids"]:
+            print(f"Found old version of {source_name}. Deleting...")
+            VECTOR_DB.delete(ids=existing_docs["ids"])
+    except Exception as e:
+        pass
     # Store in Vector Database
     try:
         VECTOR_DB.add_documents(chunks)
