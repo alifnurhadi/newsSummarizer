@@ -2,8 +2,9 @@
 
 # Default variables for ingestion (You can override these in the terminal)
 FILE ?= data/raw_laws/Mock_law.pdf
-SOURCE ?= "Mock Law"
-KEYWORD ?= "corporate_governance_and_infrastructure"
+SOURCE ?= Mock Law
+KEYWORD ?= corporate_governance_and_infrastructure
+
 
 help:
 	@echo "======================================================================"

@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 from datetime import datetime, timedelta
 from typing import Dict, List, TypedDict
 
@@ -7,7 +8,9 @@ from langchain_community.chat_models import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
 from langgraph.graph import END, StateGraph
 
-from ..init import VECTOR_DB
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from init import VECTOR_DB
 
 # Config: JSON-mode for extraction, Text-mode for advisory
 llm_json = ChatOllama(model="llama3:latest", temperature=0.1, format="json")
@@ -220,6 +223,14 @@ def review_refine_node(state: ReportState) -> ReportState:
         ]
     )
     response = (prompt | llm_text).invoke({"draft": state["final_advisory"]})
+
+    output_dir = "data/result"
+    os.makedirs(output_dir, exist_ok=True)
+
+    output_file = os.path.join(output_dir, "Report.txt")
+    with open(output_file, "w", encoding="utf-8") as wr:
+        wr.write(response.content)
+
     return {"final_advisory": response.content}
 
 

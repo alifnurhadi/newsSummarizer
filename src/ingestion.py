@@ -37,15 +37,9 @@ def ingest_law_to_db(file_path: str, source_name: str, keyword: str):
     """
     Reads a law (TXT), chunks it, and stores it in the Vector DB.
     """
-    # Read the text
-    print(f"Detected TXT. Reading raw text from '{file_path}'...")
-    raw_text = extract_text_from_txt(file_path)
-
-    if not raw_text.strip():
-        print("❌ No text could be extracted. Skipping.")
-        return
 
     ext = os.path.splitext(file_path)[1].lower()
+    raw_text = ""
 
     if ext == ".txt":
         print(f"Detected TXT. Reading raw text from '{file_path}'...")
